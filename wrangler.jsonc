@@ -1,0 +1,52 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "container-starter-2",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": ["nodejs_compat"],
+
+	"observability": {
+		"enabled": true
+	},
+
+	// Build settings
+	"main": "src/index.js",
+	// Durable object migrations
+	"migrations": [{ "tag": "v1", "new_sqlite_classes": ["MyContainer"] }],
+
+	// Dev/test environment
+	"durable_objects": {
+		"bindings": [{ "name": "MY_CONTAINER", "class_name": "MyContainer" }]
+	},
+	"containers": [
+		{
+			"configuration": {
+				"network": { "mode": "private" }
+			},
+			"image": ".",
+			"instances": 5,
+			"name": "hello-containers-go",
+			"class_name": "MyContainer"
+		}
+	],
+	"env": {
+		"staging": {
+			"durable_objects": {
+				"bindings": [{ "name": "MY_CONTAINER", "class_name": "MyContainer" }]
+			},
+			"containers": [
+				{
+					"configuration": {
+						"network": { "mode": "private" }
+					},
+					"image": ".",
+					"instances": 5,
+					"name": "hello-containers-go",
+					"class_name": "MyContainer"
+				}
+			],
+			"observability": {
+				"enabled": true
+			}
+		}
+	}
+}
